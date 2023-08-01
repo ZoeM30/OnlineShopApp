@@ -2,7 +2,7 @@
 using OnlineShopApp.Models;
 using System.Diagnostics;
 
-namespace OnlineShopApp.Controllers
+namespace OnlineShopApp.Areas.Customer.Controllers
 {
     public class HomeController : Controller
     {
