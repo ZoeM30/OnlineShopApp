@@ -106,7 +106,7 @@ namespace OnlineShopApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,ImageUrl,CategoryId")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,ImageUrl,CategoryId")] Course course, IFormFile? file)
         {
             if (id != course.Id)
             {
@@ -115,6 +115,27 @@ namespace OnlineShopApp.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"images\courses");
+                    var extension = Path.GetExtension(file.FileName);
+
+                    if(course.ImageUrl != null)
+                    {
+                        var oldImagePath = Path.Combine(wwwRootPath, course.ImageUrl.TrimStart('\\'));
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+                    course.ImageUrl = @"\images\courses\" + fileName + extension;
+                }
                 try
                 {
                     _context.Update(course);
