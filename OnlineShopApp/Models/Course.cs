@@ -15,6 +15,7 @@ namespace OnlineShopApp.Models
         [Range(1,300,ErrorMessage ="Price should be between 1 and 300")]
         public double Price { get; set; }
         [ValidateNever]
+        [Display(Name ="Image")]
         public string ImageUrl { get; set; }
 
         [Required]
