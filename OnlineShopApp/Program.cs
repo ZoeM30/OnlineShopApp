@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineShopApp.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>options.UseSqlServ
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -20,11 +24,12 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.MapRazorPages();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
