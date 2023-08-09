@@ -103,7 +103,6 @@ namespace OnlineShopApp.Areas.Admin.Controllers
 
         // POST: Courses/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Price,ImageUrl,CategoryId")] Course course, IFormFile? file)
@@ -186,13 +185,21 @@ namespace OnlineShopApp.Areas.Admin.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Courses'  is null.");
             }
+
             var course = await _context.Courses.FindAsync(id);
+
+                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, course.ImageUrl.TrimStart('\\'));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
             if (course != null)
             {
                 _context.Courses.Remove(course);
             }
 
             await _context.SaveChangesAsync();
+            TempData["success"] = "Course deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
 
