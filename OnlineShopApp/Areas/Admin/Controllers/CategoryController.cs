@@ -4,6 +4,7 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _db;
