@@ -6,6 +6,7 @@ using System.Diagnostics;
 
 namespace OnlineShopApp.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,27 +19,20 @@ namespace OnlineShopApp.Areas.Customer.Controllers
 
 
         public async Task<IActionResult> Index()
-        {
+		{
             var applicationDbContext = _db.Courses.Include(c => c.Category);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int courseId)
         {
-			if (id == null || _db.Courses == null)
-			{
-				return NotFound();
-			}
+            ShoppingCart cartObj = new ShoppingCart();
+            cartObj.Count = 1;
+            cartObj.CourseId = courseId;
+            cartObj.Course = await _db.Courses.Include(c => c.Category).FirstOrDefaultAsync(m => m.Id == courseId);
 
-			var course = await _db.Courses
-				.Include(c => c.Category)
-				.FirstOrDefaultAsync(m => m.Id == id);
-			if (course == null)
-			{
-				return NotFound();
-			}
-
-			return View(course);
+            return View(cartObj);
+            return View();
 		}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
