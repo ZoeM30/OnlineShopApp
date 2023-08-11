@@ -24,6 +24,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Password.RequireUppercase = false;
 
 });
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/Login";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
