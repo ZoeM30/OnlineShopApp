@@ -10,6 +10,7 @@ using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
