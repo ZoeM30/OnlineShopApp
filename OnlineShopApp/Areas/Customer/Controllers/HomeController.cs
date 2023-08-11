@@ -26,11 +26,16 @@ namespace OnlineShopApp.Areas.Customer.Controllers
 
         public async Task<IActionResult> Details(int courseId)
         {
+            var course = await _db.Courses.Include(c => c.Category).FirstOrDefaultAsync(m => m.Id == courseId);
+            if (course == null)
+            {
+                return NotFound();
+            }
             ShoppingCart cartObj = new()
             {
                 Count = 1,
                 CourseId = courseId,
-                Course = await _db.Courses.Include(c => c.Category).FirstOrDefaultAsync(m => m.Id == courseId)
+                Course = course
             };
 
             return View(cartObj);
