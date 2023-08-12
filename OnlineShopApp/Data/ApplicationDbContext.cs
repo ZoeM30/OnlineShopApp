@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineShopApp.Models;
+using OnlineShopApp.Data.DbInitializer;
 
 namespace OnlineShopApp.Data
 {
@@ -16,5 +17,7 @@ namespace OnlineShopApp.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
+
+
     }
 }

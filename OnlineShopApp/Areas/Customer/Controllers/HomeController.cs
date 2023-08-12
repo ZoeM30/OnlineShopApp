@@ -20,9 +20,14 @@ namespace OnlineShopApp.Areas.Customer.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
 		{
             var applicationDbContext = _db.Courses.Include(c => c.Category);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                List<Course> course = _db.Courses.Include(c => c.Category).Where(s => s.Title!.Contains(searchString)).ToList();
+                return View(course);
+            };
             return View(await applicationDbContext.ToListAsync());
         }
 
