@@ -66,6 +66,15 @@ namespace OnlineShopApp.Areas.Customer.Controllers
             return View(shoppingCartVM);
         }
 
+        [HttpPost]
+        [ActionName("Summary")]
+        [ValidateAntiForgeryToken]
+        public IActionResult SummaryPost()
+        {
+            return View("Success");
+        }
+
+
         public IActionResult Plus(int cartId)
         {
             var cart = _db.ShoppingCarts.FirstOrDefault(u=>u.Id==cartId);
