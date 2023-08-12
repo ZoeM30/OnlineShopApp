@@ -27,9 +27,48 @@ namespace OnlineShopApp.Areas.Customer.Controllers
             {
                 ListCart = _db.ShoppingCarts.Include(c => c.Course).Where(u => u.ApplicationUserId == claim.Value)
             };
+            foreach(var cart in shoppingCartVM.ListCart)
+            {
+                cart.Price = cart.Course.Price;
+                shoppingCartVM.CartTotal+=(cart.Price * cart.Count);
+            }
             
             return View(shoppingCartVM);
 
         }
+
+        public IActionResult Plus(int cartId)
+        {
+            var cart = _db.ShoppingCarts.FirstOrDefault(u=>u.Id==cartId);
+            cart.Count++;
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Minus(int cartId)
+        {
+            var cart = _db.ShoppingCarts.FirstOrDefault(u => u.Id == cartId);
+            if (cart.Count <= 1)
+            {
+                _db.ShoppingCarts.Remove(cart);
+            }
+            else
+            {
+                cart.Count--;
+
+            }
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult Remove(int cartId)
+        {
+            var cart = _db.ShoppingCarts.FirstOrDefault(u => u.Id == cartId);
+            _db.ShoppingCarts.Remove(cart);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
     }
 }

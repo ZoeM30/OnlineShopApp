@@ -52,7 +52,7 @@ namespace OnlineShopApp.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCart.ApplicationUserId = claim.Value;
 
-            ShoppingCart cartFromDb = _db.ShoppingCarts.First(u => u.ApplicationUserId == claim.Value && u.CourseId == shoppingCart.CourseId);
+            ShoppingCart cartFromDb = _db.ShoppingCarts.FirstOrDefault(u => u.ApplicationUserId == claim.Value && u.CourseId == shoppingCart.CourseId);
             if (cartFromDb == null) 
             { 
                 _db.ShoppingCarts.Add(shoppingCart);
@@ -68,6 +68,7 @@ namespace OnlineShopApp.Areas.Customer.Controllers
             return RedirectToAction("Index");
 
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
